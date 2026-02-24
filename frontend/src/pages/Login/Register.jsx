@@ -4,9 +4,10 @@ import { motion } from "framer-motion";
 import api from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 
-export default function Login() {
+export default function Register() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,11 +19,15 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await api.post("/auth/login", { email, password });
+      const res = await api.post("/auth/register", {
+        name,
+        email,
+        password
+      });
       login(res.data.token, res.data.user);
       navigate("/dashboard");
     } catch (err) {
-      const message = err.response?.data?.message || "Login failed";
+      const message = err.response?.data?.message || "Registration failed";
       setError(message);
     } finally {
       setLoading(false);
@@ -36,9 +41,9 @@ export default function Login() {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 p-8"
       >
-        <h1 className="text-2xl font-bold mb-2">Sign in</h1>
+        <h1 className="text-2xl font-bold mb-2">Create account</h1>
         <p className="text-gray-500 dark:text-gray-400 mb-6">
-          Use your account to access invoices
+          Sign up to start managing your invoices.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
@@ -46,6 +51,20 @@ export default function Login() {
           <input type="text" name="fakeusernameremembered" style={{ display: "none" }} tabIndex="-1" autoComplete="off" />
           <input type="password" name="fakepasswordremembered" style={{ display: "none" }} tabIndex="-1" autoComplete="off" />
           
+          <div>
+            <label className="block text-sm font-medium mb-1">Name</label>
+            <input
+              type="text"
+              name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-slate-700 dark:bg-slate-700"
+              placeholder="Your name"
+              autoComplete="off"
+              required
+            />
+          </div>
+
           <div>
             <label className="block text-sm font-medium mb-1">Email</label>
             <input
@@ -83,19 +102,21 @@ export default function Login() {
             disabled={loading}
             className="w-full bg-primary text-white py-2 rounded-lg font-medium hover:bg-green-600 disabled:opacity-60"
           >
-            {loading ? "Signing in..." : "Sign in"}
+            {loading ? "Creating account..." : "Sign up"}
           </button>
         </form>
+
         <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-          Don&apos;t have an account?{" "}
+          Already have an account?{" "}
           <Link
-            to="/register"
+            to="/login"
             className="font-medium text-primary hover:underline"
           >
-            Create one
+            Sign in
           </Link>
         </p>
       </motion.div>
     </div>
   );
 }
+

@@ -48,6 +48,16 @@ async function getDetails(req, res, next) {
   }
 }
 
+async function list(req, res, next) {
+  try {
+    const invoices = await service.listInvoices(req.user.userId);
+    const response = invoices.map(buildInvoiceResponse);
+    res.json(response);
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function update(req, res,next) {
     try {
         const data  = updateInvoiceSchema.parse(req.body);
@@ -64,9 +74,49 @@ async function update(req, res,next) {
     }
 }
 
+async function archive(req, res, next) {
+  try {
+    await service.archiveInvoice(
+      req.user.userId,
+      req.params.id,
+      true
+    );
+    res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function restore(req, res, next) {
+  try {
+    await service.archiveInvoice(
+      req.user.userId,
+      req.params.id,
+      false
+    );
+    res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function listArchived(req, res, next) {
+  try {
+    const invoices = await service.listArchivedInvoices(req.user.userId);
+    const response = invoices.map(buildInvoiceResponse);
+    res.json(response);
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   create,
   get,
   getDetails,
-  update
+  update,
+  list,
+  archive,
+  restore,
+  listArchived
 };

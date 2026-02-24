@@ -22,7 +22,15 @@ async function register(data){
             password: hashedPassword
         }
     });
-    return generateToken(user);
+    const token = generateToken(user);
+    return {
+        token,
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email
+        }
+    };
 }
 
 const login = async(data) =>{
@@ -34,7 +42,15 @@ const login = async(data) =>{
     const valid = await bcrypt.compare(data.password, user.password);
     if(!valid) throw new Error('Invalid credentials');
 
-    return generateToken(user);
+    const token = generateToken(user);
+    return {
+        token,
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email
+        }
+    };
 }
 
 const generateToken = (user) =>{

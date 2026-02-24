@@ -4,8 +4,8 @@ const { registerSchema, loginSchema } = require('./validation');
 const register =  async (req,res,next) => {
     try {
         const data  = registerSchema.parse(req.body);
-        const token  =  await authService.register(data);
-        res.json({token});
+        const result  =  await authService.register(data);
+        res.json(result);
         
     } catch (error) {
         next(error);
@@ -15,8 +15,8 @@ const register =  async (req,res,next) => {
 const login = async (req,res,next) => {
     try {
         const data = loginSchema.parse(req.body);
-        const token = await authService.login(data);
-        res.json({token});
+        const result = await authService.login(data);
+        res.json(result);
         
     } catch (error) {
         next(error);

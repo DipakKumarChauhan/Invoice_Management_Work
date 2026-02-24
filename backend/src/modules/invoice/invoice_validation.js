@@ -8,13 +8,14 @@ const lineSchema = z.object({
 });
 
 const createInvoiceSchema = z.object({
-    customerName: z.string(),
-    issueDate: z.string(),
-    dueDate: z.string(),
-    taxPercent: z.number().min(0).default(0),
-    currency: z.string().default("INR"),
-    lines: z.array(lineSchema).min(1)
-
+  customerName: z.string(),
+  issueDate: z.string(),
+  dueDate: z.string(),
+  taxPercent: z.number().min(0).default(0),
+  currency: z.string().default("INR"),
+  // allow client to choose between draft and sent on creation
+  status: z.enum(["DRAFT", "SENT"]).default("DRAFT"),
+  lines: z.array(lineSchema).min(1)
 });
 const updateInvoiceSchema = z.object({
   customerName: z.string(),

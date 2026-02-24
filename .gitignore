@@ -3,19 +3,25 @@ node_modules/
 package-lock.json
 yarn.lock
 
-# Environment variables
+# Environment variables (root + per-app)
 .env
 .env.local
 .env.*.local
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+backend/.env
+backend/.env.local
+backend/.env.*.local
 
-# Prisma
+# Prisma local dev DB (if used)
 backend/prisma/dev.db
 backend/prisma/dev.db-journal
 backend/prisma/dev.db-wal
 backend/prisma/dev.db-shm
 backend/src/generated/prisma
 
-# IDE
+# IDE / Editor
 .vscode/
 .idea/
 *.swp
@@ -37,12 +43,21 @@ pnpm-debug.log*
 coverage/
 .nyc_output/
 
-# Build
+# Build artifacts
 dist/
 build/
 out/
+frontend/dist/
+backend/dist/
+
+# Frontend tooling caches
+frontend/.cache/
+frontend/.eslintcache
+frontend/.turbo/
+frontend/.vite/
 
 # Misc
 .cache/
 .eslintcache
 .turbo/
+

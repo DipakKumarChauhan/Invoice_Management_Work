@@ -25,6 +25,7 @@ const createInvoice = async(userId, data) => {
             dueDate: new Date(data.dueDate),
             taxPercent: data.taxPercent,
             currency: data.currency,
+            status: data.status,
 
             taxAmount,
             total,
@@ -74,10 +75,42 @@ const archiveInvoice = async(userId, invoiceId, value) => {
             userId
         },
         data:{
-            archived: value
+      isArchived: value
         }
     })
 }
+
+const listInvoices = async (userId) => {
+  return prisma.invoice.findMany({
+    where: {
+      userId,
+      isArchived: false
+    },
+    orderBy: {
+      createdAt: "desc"
+    },
+    include: {
+      lines: true,
+      payments: true
+    }
+  });
+};
+
+const listArchivedInvoices = async (userId) => {
+  return prisma.invoice.findMany({
+    where: {
+      userId,
+      isArchived: true
+    },
+    orderBy: {
+      createdAt: "desc"
+    },
+    include: {
+      lines: true,
+      payments: true
+    }
+  });
+};
 
 async function getInvoiceDetails(userId, invoiceId) {
   const invoice = await prisma.invoice.findFirst({
@@ -172,9 +205,11 @@ async function updateInvoice(userId, invoiceId, data) {
 }
 
 module.exports = {
-    archiveInvoice,
-    createInvoice,
-    getInvoice,
-    updateInvoice,
-    getInvoiceDetails
-} 
+  archiveInvoice,
+  createInvoice,
+  getInvoice,
+  listInvoices,
+  listArchivedInvoices,
+  getInvoiceDetails,
+  updateInvoice
+};
