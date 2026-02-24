@@ -16,9 +16,18 @@ const createInvoiceSchema = z.object({
     lines: z.array(lineSchema).min(1)
 
 });
+const updateInvoiceSchema = z.object({
+  customerName: z.string(),
+  issueDate: z.string(),
+  dueDate: z.string(),
+  taxPercent: z.number().min(0),
+  currency: z.string(),
+  lines: z.array(lineSchema).min(1)
+});
 
 module.exports = {
     createInvoiceSchema,
+    updateInvoiceSchema,
     lineSchema
 }
 
