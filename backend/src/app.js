@@ -5,7 +5,7 @@ const logger = require('./utils/logger');
 
 // Routes
 const authRoutes = require("./modules/auth/routes");
-
+const invoiceRoutes = require("./modules/invoice/invoice_routes");
 // Middleware
 const errorHandler = require("./middleware/error_middleware");
 const authMiddleware = require("./middleware/auth_middleware");
@@ -25,7 +25,7 @@ app.use(
 
 // Routes
 app.use('/api/auth', authRoutes);
-
+app.use('/api/invoices', invoiceRoutes);
 // Error handling middleware
 app.use(errorHandler);
 
