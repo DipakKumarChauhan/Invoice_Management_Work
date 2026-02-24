@@ -1,5 +1,9 @@
 const service = require("./invoice_service");
 const { createInvoiceSchema } = require("./invoice_validation");
+const {
+  buildInvoiceResponse
+} = require("./invoice_presenter");
+
 
 async function create(req, res, next) {
   try {
@@ -29,7 +33,25 @@ async function get(req, res, next) {
   }
 }
 
+async function getDetails(req, res, next) {
+  try {
+    const invoice =
+      await service.getInvoiceDetails(
+        req.user.userId,
+        req.params.id
+      );
+
+    const response =
+      buildInvoiceResponse(invoice);
+
+    res.json(response);
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   create,
-  get
+  get,
+  getDetails
 };

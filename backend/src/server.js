@@ -2,6 +2,10 @@ const app =  require('./app');
 const prisma =  require('./config/db');
 const env= require('./config/env');
 const logger = require('./utils/logger');
+const startOverdueJob =
+  require("./utils/overdue_job");
+
+startOverdueJob();
 
 async function start(){
 

@@ -79,9 +79,33 @@ const archiveInvoice = async(userId, invoiceId, value) => {
     })
 }
 
+async function getInvoiceDetails(userId, invoiceId) {
+  const invoice = await prisma.invoice.findFirst({
+    where: {
+      id: invoiceId,
+      userId
+    },
+    include: {
+      lines: true,
+      payments: {
+        orderBy: {
+          paymentDate: "desc"
+        }
+      }
+    }
+  });
+
+  if (!invoice) {
+    throw new Error("Invoice not found");
+  }
+
+  return invoice;
+}
+
 
 module.exports = {
     archiveInvoice,
     createInvoice,
-    getInvoice
+    getInvoice,
+    getInvoiceDetails
 } 
